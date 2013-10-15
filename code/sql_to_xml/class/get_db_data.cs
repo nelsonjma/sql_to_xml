@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Threading;
+using DbConnection;
 
 namespace sql_to_xml
 {
@@ -36,11 +37,9 @@ namespace sql_to_xml
             int count = 0;
             while (_thread.ThreadState != ThreadState.Running)
             {
-                Thread.Sleep(10);
-
-                count++;
-
-                if (count > 10) return;
+                Thread.Sleep(10); 
+                
+                count++; if (count > 10) return;
             }
         }
 
@@ -86,14 +85,13 @@ namespace sql_to_xml
         {
             try
             {
-                Random rnd = new Random();
+                RunQuery runQuery = new RunQuery();
 
-
-                Thread.Sleep(rnd.Next(1, 20) * 1000);
+                DataTable dt = runQuery.GetData(conn, sql);
 
                 _dataRetrievedWithSuccess = true;
 
-                return new DataTable();
+                return dt;
             }
             catch (Exception ex)
             {

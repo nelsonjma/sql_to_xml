@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DbLog" EntityNamespace="DbLoging" ContextNamespace="DbLoging" Class="DbLog" BaseType="DbLinq.Data.Linq.DataContext" Provider="Sqlite" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="main.log" Member="Log">
+    <Type Name="Log">
+      <Column Name="conn" Member="Conn" Storage="_conn" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="created" Member="Created" Storage="_created" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="exec_time" Member="ExecTime" Storage="_execTime" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="id" Member="ID" Storage="_id" Type="System.Int32" DbType="NUMBER" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
+      <Column Name="site_name" Member="SiteName" Storage="_siteName" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="sql" Member="SQL" Storage="_sql" Type="System.String" DbType="TEXT" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="status" Member="Status" Storage="_status" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="title" Member="Title" Storage="_title" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="xml_file" Member="XMLFile" Storage="_xmlfIle" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
