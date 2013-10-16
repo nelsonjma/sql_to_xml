@@ -5,11 +5,12 @@
       <Column Name="conn" Member="Conn" Storage="_conn" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
       <Column Name="created" Member="Created" Storage="_created" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
       <Column Name="exec_time" Member="ExecTime" Storage="_execTime" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
+      <Column Name="frame_title" Member="FrameTitle" Storage="_frameTitle" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
       <Column Name="id" Member="ID" Storage="_id" Type="System.Int32" DbType="NUMBER" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
+      <Column Name="page_title" Member="PageTitle" Storage="_pageTitle" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
       <Column Name="site_name" Member="SiteName" Storage="_siteName" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
       <Column Name="sql" Member="SQL" Storage="_sql" Type="System.String" DbType="TEXT" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
       <Column Name="status" Member="Status" Storage="_status" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
-      <Column Name="title" Member="Title" Storage="_title" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
       <Column Name="xml_file" Member="XMLFile" Storage="_xmlfIle" Type="System.String" DbType="VARCHAR" IsPrimaryKey="false" IsDbGenerated="false" CanBeNull="true" />
     </Type>
   </Table>

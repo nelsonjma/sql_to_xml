@@ -3,7 +3,7 @@ using System.Data;
 using System.Threading;
 using DbConnection;
 
-namespace sql_to_xml
+namespace GenericMethods
 {
     class GetDbData
     {

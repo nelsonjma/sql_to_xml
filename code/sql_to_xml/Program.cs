@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+
 using DbLoging;
+using GenericMethods;
+using ntec_query_collector;
 
 namespace sql_to_xml
 {
@@ -19,32 +22,22 @@ namespace sql_to_xml
 
             _queries = new List<Dictionary<string, string>>();
 
-            _queries.Add(new Dictionary<string, string> { { "title", "a" }, { "sql", "selecta 'a' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_a.xml" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "b" }, { "sql", "select 'b' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_b.xml" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "c" }, { "sql", "select 'c' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_c.xml" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "d" }, { "sql", "select 'd' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_d.xml" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "e" }, { "sql", "select 'e' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_e.xml" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "f" }, { "sql", "select 'f' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_f.xml" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "g" }, { "sql", "select 'g' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "h" }, { "sql", "select 'h' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_h.xml" } });
-            _queries.Add(new Dictionary<string, string> { { "title", "i" }, { "sql", "select 'i' as hello" }, { "conn", @"Data Source=C:\Users\xyon\Desktop\Codigo\demo_northwind.db;Version=3;" }, { "xml_file", @"C:\temp\demo_i.xml" } });
+            LoadntecDbData(
+                            30, 
+                            new List<string> { "configs.db" }, 
+                            new List<string> { @"c:\temp\" }, 
+                            new List<string> { "ntec demo" }
+                            );
 
             // use xml schema or not
-            bool xmlSchema = true;
+            bool xmlSchema = false;
 
             // max wait time
             int maxWaitTime = 15;
 
-            // add status to query list
-            for (int i = 0; i < _queries.Count; i++)
-            {
-                _queries[i] = AddKeyStatus(_queries[i], "status", "");
-                _queries[i] = AddKeyStatus(_queries[i], "site_name", "");
-                _queries[i] = AddKeyStatus(_queries[i], "exec_time", "");
-            }
-
             // launch the threads
             int maxThreads = 4; 
+
             // 3 threads are 0.1.2 we need to remve the 3 do that its not 0.1.2.3
             maxThreads = maxThreads - 1;
             List<Thread> threads = new List<Thread>();
@@ -186,7 +179,10 @@ namespace sql_to_xml
         /// </summary>
         private static Dictionary<string, string> AddKeyStatus(Dictionary<string, string> query, string key, string value)
         {
-            if (!query.ContainsKey(key)) query.Add(key, value);
+            if (!query.ContainsKey(key))
+                query.Add(key, value);
+            else
+                query[key] = value;
 
             return query;
         }
@@ -226,7 +222,7 @@ namespace sql_to_xml
 
                 foreach (Dictionary<string, string> query in _queries)
                 {
-                    Console.WriteLine("title: " + query["title"] + " / " + "status:" + query["status"]);
+                    Console.WriteLine("PAGE: " + query["page_title"] + " FRAME: " + query["frame_title"] + " STATUS: " + query["status"]);
                 }
             }
             finally
@@ -251,7 +247,8 @@ namespace sql_to_xml
                                                 SQL = query["sql"],
                                                 SiteName = query["site_name"],
                                                 Status = query["status"],
-                                                Title = query["title"],
+                                                FrameTitle = query["frame_title"],
+                                                PageTitle = query["page_title"],
                                                 XMLFile = query["xml_file"]
                                             };
                     logs.Add(log);
@@ -265,6 +262,35 @@ namespace sql_to_xml
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Get data from site database
+        /// </summary>
+        private static void LoadntecDbData(int scheduleInterval, List<string> dbPathList, List<string> xmlFolderPathList, List<string> siteNameList)
+        {
+            if (dbPathList.Count != xmlFolderPathList.Count) return;
+
+            for (int i = 0; i < dbPathList.Count; i++)
+            {
+                string siteName = siteNameList[i];
+                string dbPath = dbPathList[i];
+                string xmlFolderPath = xmlFolderPathList[i];
+
+                Collector collector = new Collector(scheduleInterval, dbPath, xmlFolderPath);
+
+                List<Dictionary<string, string>> dbQuery = collector.GetQueries();
+
+                for (int k = 0; k < dbQuery.Count; k++)
+                {
+                    dbQuery[k] = AddKeyStatus(dbQuery[k], "status", "");
+                    dbQuery[k] = AddKeyStatus(dbQuery[k], "site_name", siteName);
+                    dbQuery[k] = AddKeyStatus(dbQuery[k], "exec_time", "");
+                }
+
+                if (dbQuery.Count > 0) _queries.AddRange(dbQuery);
+            }
+
         }
     }
 }

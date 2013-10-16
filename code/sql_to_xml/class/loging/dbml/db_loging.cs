@@ -5,7 +5,7 @@
 // | |_| | |_) | |  | |  __/ || (_| | |
 // |____/|_.__/|_|  |_|\___|\__\__,_|_|
 //
-// Auto-generated from DbLog on 2013-10-15 23:59:24Z.
+// Auto-generated from DbLog on 2013-10-16 22:21:19Z.
 // Please visit http://code.google.com/p/dblinq2007/ for more information.
 //
 namespace DbLoging
@@ -112,15 +112,17 @@ namespace DbLoging
 		
 		private string _execTime;
 		
+		private string _frameTitle;
+		
 		private System.Nullable<int> _id;
+		
+		private string _pageTitle;
 		
 		private string _siteName;
 		
 		private string _sql;
 		
 		private string _status;
-		
-		private string _title;
 		
 		private string _xmlfIle;
 		
@@ -139,9 +141,17 @@ namespace DbLoging
 		
 		partial void OnExecTimeChanging(string value);
 		
+		partial void OnFrameTitleChanged();
+		
+		partial void OnFrameTitleChanging(string value);
+		
 		partial void OnIDChanged();
 		
 		partial void OnIDChanging(System.Nullable<int> value);
+		
+		partial void OnPageTitleChanged();
+		
+		partial void OnPageTitleChanging(string value);
 		
 		partial void OnSiteNameChanged();
 		
@@ -154,10 +164,6 @@ namespace DbLoging
 		partial void OnStatusChanged();
 		
 		partial void OnStatusChanging(string value);
-		
-		partial void OnTitleChanged();
-		
-		partial void OnTitleChanging(string value);
 		
 		partial void OnXMLFileChanged();
 		
@@ -236,6 +242,28 @@ namespace DbLoging
 			}
 		}
 		
+		[Column(Storage="_frameTitle", Name="frame_title", DbType="VARCHAR", AutoSync=AutoSync.Never)]
+		[DebuggerNonUserCode()]
+		public string FrameTitle
+		{
+			get
+			{
+				return this._frameTitle;
+			}
+			set
+			{
+				if (((_frameTitle == value) 
+							== false))
+				{
+					this.OnFrameTitleChanging(value);
+					this.SendPropertyChanging();
+					this._frameTitle = value;
+					this.SendPropertyChanged("FrameTitle");
+					this.OnFrameTitleChanged();
+				}
+			}
+		}
+		
 		[Column(Storage="_id", Name="id", DbType="INTEGER", IsPrimaryKey=true, IsDbGenerated=true, AutoSync=AutoSync.Never)]
 		[DebuggerNonUserCode()]
 		public System.Nullable<int> ID
@@ -253,6 +281,28 @@ namespace DbLoging
 					this._id = value;
 					this.SendPropertyChanged("ID");
 					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_pageTitle", Name="page_title", DbType="VARCHAR", AutoSync=AutoSync.Never)]
+		[DebuggerNonUserCode()]
+		public string PageTitle
+		{
+			get
+			{
+				return this._pageTitle;
+			}
+			set
+			{
+				if (((_pageTitle == value) 
+							== false))
+				{
+					this.OnPageTitleChanging(value);
+					this.SendPropertyChanging();
+					this._pageTitle = value;
+					this.SendPropertyChanged("PageTitle");
+					this.OnPageTitleChanged();
 				}
 			}
 		}
@@ -319,28 +369,6 @@ namespace DbLoging
 					this._status = value;
 					this.SendPropertyChanged("Status");
 					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_title", Name="title", DbType="VARCHAR", AutoSync=AutoSync.Never)]
-		[DebuggerNonUserCode()]
-		public string Title
-		{
-			get
-			{
-				return this._title;
-			}
-			set
-			{
-				if (((_title == value) 
-							== false))
-				{
-					this.OnTitleChanging(value);
-					this.SendPropertyChanging();
-					this._title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
 				}
 			}
 		}

@@ -42,6 +42,10 @@
     <Reference Include="DbLinq.Sqlite">
       <HintPath>..\..\..\..\Codigo\dotNet\tools\DbLinq-0.20.1_ready_to_run\DbLinq.Sqlite.dll</HintPath>
     </Reference>
+    <Reference Include="ntec_query_collector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ntec_query_collector\code\ntec_query_collector\bin\Debug\ntec_query_collector.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -55,12 +59,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="class\get_db_data.cs" />
+    <Compile Include="class\generic\generic.cs" />
+    <Compile Include="class\generic\get_db_data.cs" />
     <Compile Include="class\loging\dbml\db_loging.cs">
       <DependentUpon>db_loging.dbml</DependentUpon>
     </Compile>
     <Compile Include="class\loging\loging.cs" />
-    <Compile Include="class\query_execution_ctrl.cs" />
+    <Compile Include="class\generic\query_execution_ctrl.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="class\loging\dbml\db_loging.dbml.layout">

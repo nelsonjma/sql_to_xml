@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace sql_to_xml
+namespace GenericMethods
 {
     /// <summary>
     /// Contains the list of ntec database...
