@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <xml_schema>true</xml_schema>
+  <max_parallel_queries>4</max_parallel_queries>
+  <timeout>10</timeout>
+  <ntec_sites>
+    <site>
+      <title>demo</title>
+      <db_path>configs.db</db_path>
+      <default_xml_folder>c:\temp\</default_xml_folder>
+    </site>
+  </ntec_sites>
+</config>

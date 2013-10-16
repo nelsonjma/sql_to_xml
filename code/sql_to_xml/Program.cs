@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -22,21 +23,27 @@ namespace sql_to_xml
 
             _queries = new List<Dictionary<string, string>>();
 
-            LoadntecDbData(
-                            30, 
-                            new List<string> { "configs.db" }, 
-                            new List<string> { @"c:\temp\" }, 
-                            new List<string> { "ntec demo" }
-                            );
+            //#################################################################################################################
+            // CONFIGs
+            string configPath = "config.xml";
 
-            // use xml schema or not
-            bool xmlSchema = false;
+            /* ntec sites */
+            ArrayList siteTitles = Generic.ReadXml(configPath, "title");
+            ArrayList dbPaths = Generic.ReadXml(configPath, "db_path");
+            ArrayList defaultXmlFolder = Generic.ReadXml(configPath, "default_xml_folder");
 
-            // max wait time
-            int maxWaitTime = 15;
+            LoadntecDbData(30, dbPaths, defaultXmlFolder, siteTitles);
 
-            // launch the threads
-            int maxThreads = 4; 
+            // xml schema ctrl
+            bool xmlSchema = false; try { xmlSchema = Generic.ReadXml(configPath, "xml_schema")[0].ToString().Equals("true", StringComparison.CurrentCultureIgnoreCase); } catch {}
+
+            // timeout
+            int maxWaitTime = 15; try { maxWaitTime = Convert.ToInt32(Generic.ReadXml(configPath, "timeout")[0].ToString()); } catch { }
+
+            // max threads
+            int maxThreads = 4; try { maxThreads = Convert.ToInt32(Generic.ReadXml(configPath, "max_parallel_queries")[0].ToString()); } catch { }
+
+            //#################################################################################################################
 
             // 3 threads are 0.1.2 we need to remve the 3 do that its not 0.1.2.3
             maxThreads = maxThreads - 1;
@@ -267,15 +274,15 @@ namespace sql_to_xml
         /// <summary>
         /// Get data from site database
         /// </summary>
-        private static void LoadntecDbData(int scheduleInterval, List<string> dbPathList, List<string> xmlFolderPathList, List<string> siteNameList)
+        private static void LoadntecDbData(int scheduleInterval, ArrayList dbPathList, ArrayList xmlFolderPathList, ArrayList siteNameList)
         {
-            if (dbPathList.Count != xmlFolderPathList.Count) return;
+            if (dbPathList.Count != xmlFolderPathList.Count || dbPathList.Count != siteNameList.Count) return;
 
             for (int i = 0; i < dbPathList.Count; i++)
             {
-                string siteName = siteNameList[i];
-                string dbPath = dbPathList[i];
-                string xmlFolderPath = xmlFolderPathList[i];
+                string siteName = siteNameList[i].ToString();
+                string dbPath = dbPathList[i].ToString();
+                string xmlFolderPath = xmlFolderPathList[i].ToString();
 
                 Collector collector = new Collector(scheduleInterval, dbPath, xmlFolderPath);
 
@@ -290,7 +297,6 @@ namespace sql_to_xml
 
                 if (dbQuery.Count > 0) _queries.AddRange(dbQuery);
             }
-
         }
     }
 }
