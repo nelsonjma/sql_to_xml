@@ -5,9 +5,14 @@
   <timeout>10</timeout>
   <ntec_sites>
     <site>
-      <title>demo</title>
+      <title>demo a</title>
       <db_path>configs.db</db_path>
       <default_xml_folder>c:\temp\</default_xml_folder>
     </site>
+    <site>
+      <title>demo b</title>
+      <db_path>configs.db</db_path>
+      <default_xml_folder>c:\temp\</default_xml_folder>
+    </site>    
   </ntec_sites>
 </config>

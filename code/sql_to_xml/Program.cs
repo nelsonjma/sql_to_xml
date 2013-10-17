@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 
 using DbLoging;
@@ -19,31 +21,53 @@ namespace sql_to_xml
 
         static void Main(string[] args)
         {
+            try
+            {
+                if (args.Length == 0) { Console.WriteLine("config file is required"); }
+
+                Start(args[0]);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Generic Error: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Starting Point
+        /// </summary>
+        private static void Start(string cfgFilePath)
+        {
+            /*********************************************************** CONFIGs ***********************************************************/
             Console.WriteLine("Read Config File");
 
+            // inicialise query list
             _queries = new List<Dictionary<string, string>>();
 
-            //#################################################################################################################
-            // CONFIGs
-            string configPath = "config.xml";
+            // get config file name
+            //string configPath = "config.xml";
+            string configPath = cfgFilePath;
 
             /* ntec sites */
-            ArrayList siteTitles = Generic.ReadXml(configPath, "title");
-            ArrayList dbPaths = Generic.ReadXml(configPath, "db_path");
-            ArrayList defaultXmlFolder = Generic.ReadXml(configPath, "default_xml_folder");
+            DataSet dsConfig = new DataSet();
+            dsConfig.ReadXml("config.xml");
 
-            LoadntecDbData(30, dbPaths, defaultXmlFolder, siteTitles);
+            // load site data
+            LoadntecDbData(30, dsConfig.Tables["site"]);
 
             // xml schema ctrl
-            bool xmlSchema = false; try { xmlSchema = Generic.ReadXml(configPath, "xml_schema")[0].ToString().Equals("true", StringComparison.CurrentCultureIgnoreCase); } catch {}
+            bool xmlSchema = false; try { xmlSchema = Generic.ReadXml(configPath, "xml_schema")[0].ToString().Equals("true", StringComparison.CurrentCultureIgnoreCase); }
+            catch { }
 
             // timeout
-            int maxWaitTime = 15; try { maxWaitTime = Convert.ToInt32(Generic.ReadXml(configPath, "timeout")[0].ToString()); } catch { }
+            int maxWaitTime = 15; try { maxWaitTime = Convert.ToInt32(Generic.ReadXml(configPath, "timeout")[0].ToString()); }
+            catch { }
 
             // max threads
-            int maxThreads = 4; try { maxThreads = Convert.ToInt32(Generic.ReadXml(configPath, "max_parallel_queries")[0].ToString()); } catch { }
+            int maxThreads = 4; try { maxThreads = Convert.ToInt32(Generic.ReadXml(configPath, "max_parallel_queries")[0].ToString()); }
+            catch { }
 
-            //#################################################################################################################
+            /*******************************************************************************************************************************/
 
             // 3 threads are 0.1.2 we need to remve the 3 do that its not 0.1.2.3
             maxThreads = maxThreads - 1;
@@ -68,13 +92,13 @@ namespace sql_to_xml
                 }
                 finally
                 {
-                    Monitor.Exit(_queries);                    
+                    Monitor.Exit(_queries);
                 }
 
                 Thread th = new Thread(() => ConnectionLaunch(index, auxMaxWaitTime, query, auxXmlSchema));
                 th.Start();
 
-                while (th.ThreadState != ThreadState.Running){ Thread.Sleep(1); }
+                while (th.ThreadState != ThreadState.Running) { Thread.Sleep(1); }
 
                 threads.Add(th);
 
@@ -92,8 +116,6 @@ namespace sql_to_xml
 
             Console.WriteLine("Job ended");
             Thread.Sleep(5000);
-
-            Console.Read();
         }
 
         /// <summary>
@@ -274,15 +296,13 @@ namespace sql_to_xml
         /// <summary>
         /// Get data from site database
         /// </summary>
-        private static void LoadntecDbData(int scheduleInterval, ArrayList dbPathList, ArrayList xmlFolderPathList, ArrayList siteNameList)
+        private static void LoadntecDbData(int scheduleInterval, DataTable siteConfig)
         {
-            if (dbPathList.Count != xmlFolderPathList.Count || dbPathList.Count != siteNameList.Count) return;
-
-            for (int i = 0; i < dbPathList.Count; i++)
+            for (int i = 0; i < siteConfig.Rows.Count; i++)
             {
-                string siteName = siteNameList[i].ToString();
-                string dbPath = dbPathList[i].ToString();
-                string xmlFolderPath = xmlFolderPathList[i].ToString();
+                string siteName         = siteConfig.Rows[i]["title"].ToString();
+                string dbPath           = siteConfig.Rows[i]["db_path"].ToString();
+                string xmlFolderPath    = siteConfig.Rows[i]["default_xml_folder"].ToString();
 
                 Collector collector = new Collector(scheduleInterval, dbPath, xmlFolderPath);
 
