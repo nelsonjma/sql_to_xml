@@ -2,7 +2,8 @@
 <config>
   <xml_schema>true</xml_schema>
   <max_parallel_queries>4</max_parallel_queries>
-  <timeout>10</timeout>
+  <timeout>60</timeout>
+  <schedule_time>10</schedule_time>
   <ntec_sites>
     <site>
       <title>demo a</title>
