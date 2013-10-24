@@ -50,22 +50,21 @@ namespace sql_to_xml
 
             /* ntec sites */
             DataSet dsConfig = new DataSet();
-            dsConfig.ReadXml("config.xml");
-
-            // load site data
-            LoadntecDbData(30, dsConfig.Tables["site"]);
+            dsConfig.ReadXml(cfgFilePath);
 
             // xml schema ctrl
-            bool xmlSchema = false; try { xmlSchema = Generic.ReadXml(configPath, "xml_schema")[0].ToString().Equals("true", StringComparison.CurrentCultureIgnoreCase); }
-            catch { }
+            bool xmlSchema = false; try { xmlSchema = GenericMethods.Generic.ReadXml(configPath, "xml_schema")[0].ToString().Equals("true", StringComparison.CurrentCultureIgnoreCase); } catch { }
 
             // timeout
-            int maxWaitTime = 15; try { maxWaitTime = Convert.ToInt32(Generic.ReadXml(configPath, "timeout")[0].ToString()); }
-            catch { }
+            int maxWaitTime = 15; try { maxWaitTime = Convert.ToInt32(GenericMethods.Generic.ReadXml(configPath, "timeout")[0].ToString()); } catch { }
 
             // max threads
-            int maxThreads = 4; try { maxThreads = Convert.ToInt32(Generic.ReadXml(configPath, "max_parallel_queries")[0].ToString()); }
-            catch { }
+            int maxThreads = 4; try { maxThreads = Convert.ToInt32(GenericMethods.Generic.ReadXml(configPath, "max_parallel_queries")[0].ToString()); } catch { }
+
+            int scheduleTime = -1; try { scheduleTime = Convert.ToInt32(GenericMethods.Generic.ReadXml(configPath, "schedule_time")[0].ToString()); } catch { }
+
+            // load site data
+            LoadntecDbData(scheduleTime, dsConfig.Tables["site"]);
 
             /*******************************************************************************************************************************/
 
